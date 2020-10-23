@@ -13,12 +13,9 @@
 </head>
 
 <body>
-    <form class="form-inline">
+    <form class="form-inline" action="facturi.php" method="POST">
         <div class="form-group mx-sm-3 mb-2">
-            <input type="submit" class="btn btn-primary" value="Afisare Facturi Create"></input>
-        </div>
-        <div class="form-group mx-sm-3 mb-2">
-            <input type="button" class="btn btn-dark" value="Generare Factura Noua"></input>
+            <input type="submit" class="btn btn-primary" name="afisare_facturi" value="Afisare Facturi Create"></input>
         </div>
     </form>
 
@@ -30,13 +27,13 @@
 
         <h5>Tip factura</h5>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="radio_fiscala" id="radio_fiscala" checked>
+            <input class="form-check-input" type="radio" name="radio_tip_factura" id="radio_fiscala" value="fiscala" checked>
             <label class="form-check-label" for="radio_fiscala">
                 Fiscala
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="radio" name="radio_proforma" id="radio_proforma">
+            <input class="form-check-input" type="radio" name="radio_tip_factura" id="radio_proforma" value="proforma">
             <label class="form-check-label" for="radio_proforma">
                 Pro Forma
             </label>
@@ -239,14 +236,49 @@
                         </td>
                     </tr>
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            Subtotal
+                        </td>
+                        <td>
+                            <input type="number" class="form-control" name="subtotal_valoare" value="0" readonly>
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="number" class="form-control" name="subtotal_tva" value="0" readonly>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="font-weight-bold">Total</td>
+                        <td colspan="2">
+                            <input type="number" class="form-control font-weight-bold" name="total" value="0" readonly>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <br>
         <input type="submit" class="btn btn-success" name="generare_factura" value="Generare Factura">
     </form>
 
-    <button class="btn btn-dark float-right" id="rand_nou">Adauga produs</button>
-
+    <ul class="nav justify-content-end">
+        <li class="nav-item">
+            <button class="btn btn-dark" id="rand_nou">Adauga produs</button>
+        </li>
+        <li class="nav-item">
+            <button class="btn btn-danger" id="sterge_rand">Sterge produs</button>
+        </li>
+    </ul>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -256,7 +288,7 @@
 //includem fisierul cu clasele
 include 'insert.php';
 
-error_reporting(0);
+//error_reporting(0);
 
 function inserare_furnizor() //inseram datele furnizorului intr-un obiect
 {
@@ -339,7 +371,21 @@ function inserare_produse($linii) //inseram datele produselor intr-un array de o
     return $produse;
 }
 
-function inserare_in_db(Firma $client, Firma $furnizor, array $produse)
+function inserare_factura()
+{
+    $factura = new Factura;
+    $factura->tip_factura = $_POST['radio_tip_factura'];
+    $factura->serie = $_POST['input_serie'];
+    $factura->numar = $_POST['input_numar'];
+    $factura->data = $_POST['input_data'];
+    $factura->scadenta = $_POST['input_scadenta'];
+    $factura->valoare = $_POST['subtotal_valoare'];
+    $factura->valoare_tva = $_POST['subtotal_tva'];
+    $factura->total = $_POST['total'];
+    return $factura;
+}
+
+function inserare_in_db(Firma $client, Firma $furnizor, array $produse, Factura $factura)
 {
     //date de conectare la baza de date 
     $servername = "remotemysql.com";
@@ -349,32 +395,69 @@ function inserare_in_db(Firma $client, Firma $furnizor, array $produse)
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
     // Check connection
+
+
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
-    }
-    $sql_furnizor = "INSERT INTO furnizor (denumire, cui, reg_com, tara, judet, localitate, adresa, cont_bancar, banca, capital_social, telefon, email)
+    } else {
+        $sql_furnizor = "INSERT INTO furnizor (denumire, cui, reg_com, tara, judet, localitate, adresa, cont_bancar, banca, capital_social, telefon, email)
 VALUES ('$furnizor->denumire', '$furnizor->cui', '$furnizor->reg_com', '$furnizor->tara', '$furnizor->judet', '$furnizor->localitate', '$furnizor->adresa', '$furnizor->cont_bancar', '$furnizor->banca', $furnizor->capital_social, $furnizor->telefon, '$furnizor->email')";
 
-    if ($conn->query($sql_furnizor) === FALSE) {
-        echo "Error: " . $sql_furnizor . "<br>" . $conn->error;
-    }
+        if ($conn->query($sql_furnizor) === FALSE) {
+            echo "Error: " . $sql_furnizor . "<br>" . $conn->error;
+        }
 
-    $sql_client = "INSERT INTO client (denumire, cui, reg_com, tara, judet, localitate, adresa, cont_bancar, banca, capital_social, telefon, email)
+        $sql_client = "INSERT INTO client (denumire, cui, reg_com, tara, judet, localitate, adresa, cont_bancar, banca, capital_social, telefon, email)
 VALUES ('$client->denumire', '$client->cui', '$client->reg_com', '$client->tara', '$client->judet', '$client->localitate', '$client->adresa', '$client->cont_bancar', '$client->banca', $client->capital_social, $client->telefon, '$client->email')";
 
-    if ($conn->query($sql_client) === FALSE) {
-        echo "Error: " . $sql_client . "<br>" . $conn->error;
-    }
+        if ($conn->query($sql_client) === FALSE) {
+            echo "Error: " . $sql_client . "<br>" . $conn->error;
+        }
 
-    foreach ($produse as $produs) {
-        $sql_produs = "INSERT INTO produs (descriere, unitate_masura, cantitate, pret_unit, valoare, cota_tva, valoare_tva)
+        $nr_produse = 0;
+        foreach ($produse as $produs) {
+            $sql_produs = "INSERT INTO produs (descriere, unitate_masura, cantitate, pret_unit, valoare, cota_tva, valoare_tva)
 VALUES ('$produs->descriere','$produs->unitate_masura', $produs->cantitate, $produs->pret_unitar, $produs->valoare, $produs->cota_tva, $produs->valoare_tva)";
 
-        if ($conn->query($sql_produs) === FALSE) {
-            echo "Error: " . $sql_produs . "<br>" . $conn->error;
+            if ($conn->query($sql_produs) === FALSE) {
+                echo "Error: " . $sql_produs . "<br>" . $conn->error;
+            }
+            $nr_produse++;
+        }
+
+        $date_furnizor = $conn->query("SELECT id from furnizor ORDER BY id DESC LIMIT 1");
+        $row_f = $date_furnizor->fetch_assoc();
+        $id_furnizor = $row_f["id"];
+        $date_client = $conn->query("SELECT id from client ORDER BY id DESC LIMIT 1");
+        $row_c = $date_client->fetch_assoc();
+        $id_client = $row_c["id"];
+        echo $id_furnizor;
+
+
+        $sql_factura = "INSERT INTO factura (id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, subtotal_valoare, subtotal_tva, total)
+VALUES ($id_furnizor, $id_client,'$factura->tip_factura','$factura->serie', $factura->numar, '$factura->data', '$factura->scadenta', $factura->valoare, $factura->valoare_tva, $factura->total)";
+
+        if ($conn->query($sql_factura) === FALSE) {
+            echo "Error: " . $sql_factura . "<br>" . $conn->error;
+        }
+
+        $date_factura = $conn->query("SELECT id from factura ORDER BY id DESC LIMIT 1");
+        $row_fac = $date_factura->fetch_assoc();
+        $id_factura = $row_fac["id"];
+
+        $sql_toate_produsele = "SELECT id FROM produs ORDER BY id DESC LIMIT $nr_produse";
+        $query = mysqli_query($conn, $sql_toate_produsele);
+        if ($query) {
+            while ($row = mysqli_fetch_assoc($query)) {
+                $id_produs_db = $row['id'];
+                $sql_factura_produs = "INSERT INTO factura_produs (id_factura, id_produs)
+                VALUES ($id_factura, $id_produs_db)";
+                if ($conn->query($sql_factura_produs) === FALSE) {
+                    echo "Error: " . $sql_factura_produs . "<br>" . $conn->error;
+                }
+            }
         }
     }
-
     $conn->close();
 }
 
@@ -387,14 +470,45 @@ function nr_linii()
     return $linia - 1;
 }
 
-$factura = new Factura();
+function produse_complete(array $produse)
+{
+    foreach ($produse as $produs) {
+        if (empty($produs->descriere) || empty($produs->unitate_masura) || empty($produs->cantitate) || empty($produs->pret_unitar) || empty($produs->valoare) || empty($produs->cota_tva) || empty($produs->valoare_tva)) {
+            return FALSE;
+        }
+    }
+    return TRUE;
+}
+
+
 
 if (isset($_POST['generare_factura'])) {
-    $furnizor = inserare_furnizor();
-    $client = inserare_client();
-    $produse = inserare_produse(nr_linii());
-    inserare_in_db($client, $furnizor, $produse);
-    echo '<script>alert("Factura generata cu succes!");</script>';
+    $factura = inserare_factura();
+    if (empty($factura->serie) || empty($factura->numar) || empty($factura->data) || empty($factura->scadenta)) {
+        echo '<script>alert("Nu ati completat toate datele facturii! (Seria, numarul, data sau scadenta)");</script>';
+        die();
+    } else {
+        $furnizor = inserare_furnizor();
+        if (empty($furnizor->denumire) || empty($furnizor->cui) || empty($furnizor->reg_com) || empty($furnizor->tara) || empty($furnizor->judet) || empty($furnizor->localitate) || empty($furnizor->adresa) || empty($furnizor->cont_bancar) || empty($furnizor->banca) || empty($furnizor->capital_social) || empty($furnizor->telefon) || empty($furnizor->email)) {
+            echo '<script>alert("Nu ati completat toate datele furnizorului!");</script>';
+            die();
+        } else {
+            $client = inserare_client();
+            if (empty($client->denumire) || empty($client->cui) || empty($client->reg_com) || empty($client->tara) || empty($client->judet) || empty($client->localitate) || empty($client->adresa) || empty($client->cont_bancar) || empty($client->banca) || empty($client->capital_social) || empty($client->telefon) || empty($client->email)) {
+                echo '<script>alert("Nu ati completat toate datele clientului!");</script>';
+                die();
+            } else {
+                $produse = inserare_produse(nr_linii());
+                if (produse_complete($produse)) {
+                    inserare_in_db($client, $furnizor, $produse, $factura);
+                    echo '<script>alert("Factura generata cu succes!");</script>';
+                } else {
+                    echo '<script>alert("Nu ati completat toate datele produselor!");</script>';
+                    die();
+                }
+            }
+        }
+    }
 }
 
 ?>
@@ -430,6 +544,10 @@ if (isset($_POST['generare_factura'])) {
             linii++;
             var rand_nou = html.replace(/1/g, linii);
             $('tbody').append(rand_nou);
+        });
+        $('#sterge_rand').click(function() {
+            $('tr').get(linii).remove();
+            linii--;
         });
     })
 </script>

@@ -28,11 +28,12 @@ class Produs
 
 class Factura
 {
+    public $tip_factura;
     public $serie;
     public $numar;
     public $data;
     public $scadenta;
-    public $furnizor;
-    public $client;
-    public $produse;
+    public $valoare;
+    public $valoare_tva;
+    public $total;
 }
