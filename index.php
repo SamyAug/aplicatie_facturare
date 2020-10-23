@@ -7,6 +7,19 @@
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 
 <head>
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
     <br>
     <h2 class="col" style="border-bottom: 1px solid #f2f2f2;">Aplicatie de gestionare a facturilor</h2>
     <br>
@@ -203,7 +216,7 @@
 
         <h5>Detalii Produse</h5>
         <div class="row col">
-            <table class="table table-hover col-md-11" id="myTable">
+            <table class="table table-hover col-md-12" id="myTable">
                 <thead class="thead-dark table-bordered">
                     <tr>
                         <th scope="col">#</th>
@@ -226,11 +239,11 @@
                         </td>
                         <td><input type="number" class="form-control" name="cantitate_1" id="cantitate_1" placeholder="Ex: 2">
                         </td>
-                        <td><input type="number" class="form-control" name="pret_unit_1" id="pret_unit_1" placeholder="Ex: 500.00">
+                        <td><input type="number" class="form-control" name="pret_unit_1" id="pret_unit_1" placeholder="Ex: 500.00" onchange="calculeaza_valoare(1)">
                         </td>
                         <td><input type="number" class="form-control" name="valoare_1" id="valoare_1" placeholder="Ex: 1000.00">
                         </td>
-                        <td><input type="number" class="form-control" name="cota_tva_1" id="cota_tva_1" placeholder="Ex: 19">
+                        <td><input type="number" class="form-control" name="cota_tva_1" id="cota_tva_1" placeholder="Ex: 19" onchange="calculeaza_tva(1)">
                         </td>
                         <td><input type="number" class="form-control" name="valoare_tva_1" id="valoare_tva_1" placeholder="Ex: 190">
                         </td>
@@ -246,11 +259,11 @@
                             Subtotal
                         </td>
                         <td>
-                            <input type="number" class="form-control" name="subtotal_valoare" value="0" readonly>
+                            <input type="number" class="form-control" id="subtotal_valoare" name="subtotal_valoare" readonly>
                         </td>
                         <td></td>
                         <td>
-                            <input type="number" class="form-control" name="subtotal_tva" value="0" readonly>
+                            <input type="number" class="form-control" id="subtotal_tva" name="subtotal_tva" readonly>
                         </td>
                     </tr>
                     <tr>
@@ -261,7 +274,7 @@
                         <td></td>
                         <td class="font-weight-bold">Total</td>
                         <td colspan="2">
-                            <input type="number" class="form-control font-weight-bold" name="total" value="0" readonly>
+                            <input type="number" class="form-control font-weight-bold" id="total" name="total" readonly>
                         </td>
                     </tr>
                 </tfoot>
@@ -523,11 +536,11 @@ if (isset($_POST['generare_factura'])) {
                         </td>\
                         <td><input type="number" class="form-control" name="cantitate_1" id="cantitate_1">\
                         </td>\
-                        <td><input type="number" class="form-control" name="pret_unit_1" id="pret_unit_1">\
+                        <td><input type="number" class="form-control" name="pret_unit_1" id="pret_unit_1" onchange="calculeaza_valoare(1)">\
                         </td>\
                         <td><input type="number" class="form-control" name="valoare_1" id="valoare_1">\
                         </td>\
-                        <td><input type="number" class="form-control" name="cota_tva_1" id="cota_tva_1">\
+                        <td><input type="number" class="form-control" name="cota_tva_1" id="cota_tva_1" onchange="calculeaza_tva(1)">\
                         </td>\
                         <td><input type="number" class="form-control" name="valoare_tva_1" id="valoare_tva_1">\
                         </td>\
@@ -538,18 +551,66 @@ if (isset($_POST['generare_factura'])) {
     $(function() {
 
         var linii = $("#myTable > tbody > tr").length;
-        $('tbody').sortable();
+        $('tbody').sortable(); //functia care permite rearanjarea randurilor in tabel
 
-        $('#rand_nou').click(function() {
+        $('#rand_nou').click(function() { //functia care permite adaugarea unui nou rand in tabel --- se insereaza cod-ul html de mai sus
             linii++;
-            var rand_nou = html.replace(/1/g, linii);
+            var rand_nou = html.replace(/1/g, linii); //fiecare nume a elementelor din care e compusa linia e diferit deoarece facem replace
             $('tbody').append(rand_nou);
         });
-        $('#sterge_rand').click(function() {
+        $('#sterge_rand').click(function() { //functia care sterge o linie la apasarea butonului
             $('tr').get(linii).remove();
             linii--;
+            calculeaza_valoare(linii);
+            calculeaza_tva(linii);
         });
+
     })
+
+    //functia care calculeaza valoarea produselor pe fiecare linie fara tva --- numar de produse * pret pe bucata
+    function calculeaza_valoare(id) {
+        var pret_unitar = document.getElementById("pret_unit_" + id).value;
+        var cantitate = document.getElementById("cantitate_" + id).value;
+        document.getElementById("valoare_" + id).value = pret_unitar * cantitate;
+        calc_subtotal_valoare(id);
+    }
+
+    //functia care calculeaza tva-ul fiecarei linii --- acesta este un procent din valoarea produsului
+    function calculeaza_tva(id) {
+        var valoare = document.getElementById("valoare_" + id).value;
+        var cota_tva = document.getElementById("cota_tva_" + id).value;
+        document.getElementById("valoare_tva_" + id).value = valoare * cota_tva / 100;
+        calc_subtotal_tva(id);
+    }
+
+    //functia care calculeaza valoarea totala a produselor fara tva
+    function calc_subtotal_valoare(nr_linii) {
+        var subtotal = 0;
+        for (var i = 1; i <= nr_linii; i++) {
+            var valoare = Number(document.getElementById("valoare_" + i).value);
+            subtotal = Number(subtotal) + Number(valoare);
+        }
+        document.getElementById("subtotal_valoare").value = Number(subtotal);
+        calc_total();
+    }
+
+    //functia care calculeaza tva-ul total al produselor
+    function calc_subtotal_tva(nr_linii) {
+        var subtotal = 0;
+        for (var i = 1; i <= nr_linii; i++) {
+            var valoare = Number(document.getElementById("valoare_tva_" + i).value);
+            subtotal = Number(subtotal) + Number(valoare);
+        }
+        document.getElementById("subtotal_tva").value = Number(subtotal);
+        calc_total();
+    }
+
+    //functia care calculeaza totalul facturii
+    function calc_total() {
+        var subtotal_valoare = Number(document.getElementById("subtotal_valoare").value);
+        var subtotal_tva = Number(document.getElementById("subtotal_tva").value);
+        document.getElementById("total").value = subtotal_valoare + subtotal_tva;
+    }
 </script>
 
 </html>
