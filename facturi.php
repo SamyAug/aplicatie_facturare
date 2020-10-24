@@ -15,48 +15,143 @@
 
 <body>
     <form class="col form-inline" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Cautare dupa
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <a class="dropdown-item" href="#">Something else here</a>
-            </div>
-        </div>
+        <select class="custom-select" id="optiuni_cautare" name="optiuni_cautare">
+            <option selected value="">Cautare dupa...</option>
+            <option value="serie">Serie</option>
+            <option value="numar">Numar</option>
+            <option value="data_emiterii">Data Emiterii</option>
+            <option value="scadenta">Data Scadentei</option>
+            <option value="denumire_furnizor">Furnizor</option>
+            <option value="denumire_client">Client</option>
+            <option value="total">Total Plata</option>
+        </select>
         <input type="text" class="form-control" id="input_cautare" name="input_cautare">
+        <input type="submit" class="btn btn-dark" name="buton_cautare" value="Cauta">
     </form>
-
-    <div class="col">
-        <table class="table table-hover col-sm-12" id="tabel_facturi">
-            <thead class="thead-dark table-bordered">
-                <tr id="line_1">
-                    <th scope="col">#</th>
-                    <th scope="col">Serie</th>
-                    <th scope="col">Numar</th>
-                    <th scope="col">Data Crearii</th>
-                    <th scope="col">Scadenta</th>
-                    <th scope="col">Furnizor</th>
-                    <th scope="col">Client</th>
-                    <th scope="col">Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>HP</td>
-                    <td>123412</td>
-                    <td>@mdo</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </body>
 
 </html>
-
 <?php
-// if (isset($_POST['afisare_facturi'])) {
-//     echo "Aici vom afisa facturile";
-// }
+
+if (isset($_POST['afisare_facturi'])) {
+    afiseaza_facturi("toate", "toate");
+}
+
+if (isset($_POST['buton_cautare'])) {
+    if (!empty($_POST['optiuni_cautare']) || !empty($_POST['input_cautare'])) {
+        $selected = $_POST['optiuni_cautare'];
+        $input_cautare = $_POST['input_cautare'];
+        afiseaza_facturi($selected, $input_cautare);
+    } else {
+        afiseaza_facturi("toate", "toate");
+    }
+}
+
+function seteaza_inceput_tabel()
+{
+    $html_inceput_tabel = "<div class=\"col\">
+<table class=\"table table-hover col-sm-10\" id=\"tabel_facturi\">
+    <thead class=\"thead-dark table-bordered\">
+        <tr>
+            <th scope=\"col\">#</th>
+            <th scope=\"col\">Tip</th>
+            <th scope=\"col\">Serie</th>
+            <th scope=\"col\">Numar</th>
+            <th scope=\"col\">Data</th>
+            <th scope=\"col\">Scadenta</th>
+            <th scope=\"col\">Denumire Furnizor</th>
+            <th scope=\"col\">Denumire Client</th>
+            <th scope=\"col\">Total</th>
+        </tr>
+    </thead>
+    <tbody id=\"table_body\">";
+    return $html_inceput_tabel;
+}
+function seteaza_sf_tabel()
+{
+    $html_sf_tabel = "</tbody>
+</table>
+</div>";
+    return $html_sf_tabel;
+}
+
+function afiseaza_facturi($optiune_cautare, $input_cautare)
+{
+    echo seteaza_inceput_tabel();
+    //date de conectare la baza de date 
+    $servername = "remotemysql.com";
+    $username = "ALMtbDx7gH";
+    $password = "WCvE5R5BGN";
+    $dbname = "ALMtbDx7gH";
+
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    // Check connection
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } else {
+        $nr_linii = 0;
+        echo "$optiune_cautare $input_cautare";
+        // $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura ORDER BY id DESC";
+        if ($optiune_cautare == "toate" && $input_cautare == "toate") {
+            $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura ORDER BY id DESC";
+        } else {
+            if ($optiune_cautare == "denumire_furnizor") {
+                $date_furnizor = $conn->query("SELECT id from furnizor where denumire='$input_cautare'");
+                $row_furnizor = $date_furnizor->fetch_assoc();
+                $id_furnizor = $row_furnizor["id"];
+                echo $id_furnizor;
+                $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_furnizor = '$id_furnizor' ORDER BY id DESC";
+            } else {
+                if ($optiune_cautare == "denumire_client") {
+                    $date_client = $conn->query("SELECT id from client where denumire='$input_cautare'");
+                    $row_client = $date_client->fetch_assoc();
+                    $id_client = $row_client["id"];
+                    $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_client = '$id_client' ORDER BY id DESC";
+                } else {
+                    $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE $optiune_cautare = '$input_cautare' ORDER BY id DESC";
+                }
+            }
+        }
+        $query = mysqli_query($conn, $sql_toate_facturile);
+        if ($query) {
+            while ($row = mysqli_fetch_assoc($query)) {
+                $nr_linii++;
+                $id_furnizor = $row['id_furnizor'];
+                $id_client = $row['id_client'];
+                $tip_factura = $row['tip_factura'];
+                $serie = $row['serie'];
+                $numar = $row['numar'];
+                $data_emiterii = $row['data_emiterii'];
+                $scadenta = $row['scadenta'];
+                $total = $row['total'];
+
+                //obtinem denumirea clientului din factura care e in alta tabela
+                $date_client = $conn->query("SELECT denumire from client where id=$id_client");
+                $row_client = $date_client->fetch_assoc();
+                $nume_client = $row_client["denumire"];
+
+                //obtinem denumirea furnizorului din factura care e in alta tabela
+                $date_furnizor = $conn->query("SELECT denumire from furnizor where id=$id_furnizor");
+                $row_furnizor = $date_furnizor->fetch_assoc();
+                $nume_furnizor = $row_furnizor["denumire"];
+
+                echo "
+            <tr>
+                <th>$nr_linii</th>
+                <td>$tip_factura</td>
+                <td>$serie</td>
+                <td>$numar</td>
+                <td>$data_emiterii</td>
+                <td>$scadenta</td>
+                <td>$nume_furnizor</td>
+                <td>$nume_client</td>
+                <td>$total</td>
+            </tr>
+            ";
+            }
+        }
+    }
+    echo seteaza_sf_tabel();
+}

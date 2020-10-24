@@ -237,15 +237,15 @@
                         </td>
                         <td><input type="text" class="form-control" name="um_1" id="um_1" placeholder="Ex: Bucata">
                         </td>
-                        <td><input type="number" class="form-control" name="cantitate_1" id="cantitate_1" placeholder="Ex: 2">
+                        <td><input type="number" class="form-control" name="cantitate_1" id="cantitate_1" min="0" step="0.01" placeholder="Ex: 2">
                         </td>
-                        <td><input type="number" class="form-control" name="pret_unit_1" id="pret_unit_1" placeholder="Ex: 500.00" onchange="calculeaza_valoare(1)">
+                        <td><input type="number" class="form-control" name="pret_unit_1" id="pret_unit_1" min="0" step="0.01" placeholder="Ex: 500.00" onchange="calculeaza_valoare(1)">
                         </td>
-                        <td><input type="number" class="form-control" name="valoare_1" id="valoare_1" placeholder="Ex: 1000.00">
+                        <td><input type="number" class="form-control" name="valoare_1" id="valoare_1" min="0" step="0.01" placeholder="Ex: 1000.00">
                         </td>
-                        <td><input type="number" class="form-control" name="cota_tva_1" id="cota_tva_1" placeholder="Ex: 19" onchange="calculeaza_tva(1)">
+                        <td><input type="number" class="form-control" name="cota_tva_1" id="cota_tva_1" min="0" step="0.01" placeholder="Ex: 19" onchange="calculeaza_tva(1)">
                         </td>
-                        <td><input type="number" class="form-control" name="valoare_tva_1" id="valoare_tva_1" placeholder="Ex: 190">
+                        <td><input type="number" class="form-control" name="valoare_tva_1" id="valoare_tva_1" min="0" step="0.01" placeholder="Ex: 190">
                         </td>
                     </tr>
                 </tbody>
@@ -534,15 +534,15 @@ if (isset($_POST['generare_factura'])) {
                         </td>\
                         <td><input type="text" class="form-control" name="um_1" id="um_1">\
                         </td>\
-                        <td><input type="number" class="form-control" name="cantitate_1" id="cantitate_1">\
+                        <td><input type="number" class="form-control" name="cantitate_1" id="cantitate_1" min="0" step="0.01">\
                         </td>\
-                        <td><input type="number" class="form-control" name="pret_unit_1" id="pret_unit_1" onchange="calculeaza_valoare(1)">\
+                        <td><input type="number" class="form-control" name="pret_unit_1" id="pret_unit_1" min="0" step="0.01" onchange="calculeaza_valoare(1)">\
                         </td>\
-                        <td><input type="number" class="form-control" name="valoare_1" id="valoare_1">\
+                        <td><input type="number" class="form-control" name="valoare_1" id="valoare_1" min="0" step="0.01">\
                         </td>\
-                        <td><input type="number" class="form-control" name="cota_tva_1" id="cota_tva_1" onchange="calculeaza_tva(1)">\
+                        <td><input type="number" class="form-control" name="cota_tva_1" id="cota_tva_1" min="0" step="0.01" onchange="calculeaza_tva(1)">\
                         </td>\
-                        <td><input type="number" class="form-control" name="valoare_tva_1" id="valoare_tva_1">\
+                        <td><input type="number" class="form-control" name="valoare_tva_1" id="valoare_tva_1" min="0" step="0.01">\
                         </td>\
                     </tr>';
 
