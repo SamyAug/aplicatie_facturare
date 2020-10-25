@@ -7,10 +7,14 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <br>
-    <form class="row col form-inline" action="index.php" method="POST">
-        <h3 class="col-sm-4" style="border-bottom: 1px solid #f2f2f2;">Lista facturi</h3>
+    <h2 class="col" style="border-bottom: 1px solid #f2f2f2;">Aplicatie de gestionare a facturilor</h2>
+    <br>
+    <form class="col" action="index.php" method="POST">
         <input type="submit" class="btn btn-success" name="factura_noua" value="Creare Factura Noua">
     </form>
+    <br>
+    <h3 class="col" style="border-bottom: 1px solid #f2f2f2;">Lista facturilor</h3>
+    <br>
 </head>
 
 <body>
@@ -29,6 +33,10 @@
         <input type="submit" class="btn btn-dark" name="buton_cautare" value="Cauta">
     </form>
 </body>
+
+<script>
+
+</script>
 
 </html>
 <?php
@@ -59,8 +67,8 @@ function seteaza_inceput_tabel()
             <th scope=\"col\">Numar</th>
             <th scope=\"col\">Data</th>
             <th scope=\"col\">Scadenta</th>
-            <th scope=\"col\">Denumire Furnizor</th>
-            <th scope=\"col\">Denumire Client</th>
+            <th scope=\"col\">Furnizor</th>
+            <th scope=\"col\">Client</th>
             <th scope=\"col\">Total</th>
         </tr>
     </thead>
@@ -86,58 +94,64 @@ function afiseaza_facturi($optiune_cautare, $input_cautare)
 
     // Create connection
     $conn = new mysqli($servername, $username, $password, $dbname);
-
+    $sql_toate_facturile = "";
     // Check connection
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } else {
         $nr_linii = 0;
-        echo "$optiune_cautare $input_cautare";
-        // $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura ORDER BY id DESC";
         if ($optiune_cautare == "toate" && $input_cautare == "toate") {
             $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura ORDER BY id DESC";
         } else {
             if ($optiune_cautare == "denumire_furnizor") {
-                $date_furnizor = $conn->query("SELECT id from furnizor where denumire='$input_cautare'");
+                $date_furnizor = $conn->query("SELECT id from furnizor where denumire LIKE '%$input_cautare%'");
                 $row_furnizor = $date_furnizor->fetch_assoc();
-                $id_furnizor = $row_furnizor["id"];
-                echo $id_furnizor;
-                $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_furnizor = '$id_furnizor' ORDER BY id DESC";
+                if ($row_furnizor != NULL) {
+                    $id_furnizor = $row_furnizor["id"];
+                    $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_furnizor = '$id_furnizor' ORDER BY id DESC";
+                } else {
+                    echo "<script>alert(\"Furnizorul nu s-a gasit\"); </script>";
+                }
             } else {
                 if ($optiune_cautare == "denumire_client") {
-                    $date_client = $conn->query("SELECT id from client where denumire='$input_cautare'");
+                    $date_client = $conn->query("SELECT id from client where denumire LIKE '%$input_cautare%'");
                     $row_client = $date_client->fetch_assoc();
-                    $id_client = $row_client["id"];
-                    $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_client = '$id_client' ORDER BY id DESC";
+                    if ($row_client != NULL) {
+                        $id_client = $row_client["id"];
+                        $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_client = '$id_client' ORDER BY id DESC";
+                    } else {
+                        echo "<script>alert(\"Clientul nu s-a gasit\"); </script>";
+                    }
                 } else {
-                    $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE $optiune_cautare = '$input_cautare' ORDER BY id DESC";
+                    $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE $optiune_cautare LIKE '%$input_cautare%' ORDER BY id DESC";
                 }
             }
         }
-        $query = mysqli_query($conn, $sql_toate_facturile);
-        if ($query) {
-            while ($row = mysqli_fetch_assoc($query)) {
-                $nr_linii++;
-                $id_furnizor = $row['id_furnizor'];
-                $id_client = $row['id_client'];
-                $tip_factura = $row['tip_factura'];
-                $serie = $row['serie'];
-                $numar = $row['numar'];
-                $data_emiterii = $row['data_emiterii'];
-                $scadenta = $row['scadenta'];
-                $total = $row['total'];
+        if ($sql_toate_facturile != "") {
+            $query = mysqli_query($conn, $sql_toate_facturile);
+            if ($query) {
+                while ($row = mysqli_fetch_assoc($query)) {
+                    $nr_linii++;
+                    $id_furnizor = $row['id_furnizor'];
+                    $id_client = $row['id_client'];
+                    $tip_factura = $row['tip_factura'];
+                    $serie = $row['serie'];
+                    $numar = $row['numar'];
+                    $data_emiterii = $row['data_emiterii'];
+                    $scadenta = $row['scadenta'];
+                    $total = $row['total'];
 
-                //obtinem denumirea clientului din factura care e in alta tabela
-                $date_client = $conn->query("SELECT denumire from client where id=$id_client");
-                $row_client = $date_client->fetch_assoc();
-                $nume_client = $row_client["denumire"];
+                    //obtinem denumirea clientului din factura care e in alta tabela
+                    $date_client = $conn->query("SELECT denumire from client where id=$id_client");
+                    $row_client = $date_client->fetch_assoc();
+                    $nume_client = $row_client["denumire"];
 
-                //obtinem denumirea furnizorului din factura care e in alta tabela
-                $date_furnizor = $conn->query("SELECT denumire from furnizor where id=$id_furnizor");
-                $row_furnizor = $date_furnizor->fetch_assoc();
-                $nume_furnizor = $row_furnizor["denumire"];
+                    //obtinem denumirea furnizorului din factura care e in alta tabela
+                    $date_furnizor = $conn->query("SELECT denumire from furnizor where id=$id_furnizor");
+                    $row_furnizor = $date_furnizor->fetch_assoc();
+                    $nume_furnizor = $row_furnizor["denumire"];
 
-                echo "
+                    echo "
             <tr>
                 <th>$nr_linii</th>
                 <td>$tip_factura</td>
@@ -150,6 +164,7 @@ function afiseaza_facturi($optiune_cautare, $input_cautare)
                 <td>$total</td>
             </tr>
             ";
+                }
             }
         }
     }

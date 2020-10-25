@@ -32,7 +32,7 @@
         </div>
     </form>
 
-    <br> <br>
+    <br>
     <h3 class="col" style="border-bottom: 1px solid #f2f2f2;">Factura noua</h3>
     <br>
 
@@ -146,72 +146,124 @@
 
         <div class="form-inline">
             <h5 class="col-sm-2">Detalii Client</h5>
-            <button type="button" class="btn btn-outline-dark col-sm-1" data-toggle="collapse" data-target="#collapse_client" aria-expanded="true" aria-controls="collapse_client">
-                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-caret-down-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z">
-                    </path>
-                </svg>
-            </button>
+            <div class="col-sm-1">Tip client:</div>
+            <div class="form-check col-sm-1">
+                <input class="form-check-input" type="radio" name="radio_tip_client" id="radio_client_firma" value="client_firma" data-toggle="collapse" data-target="#collapse_client_firma" aria-expanded="true" aria-controls="collapse_client_firma">
+                <label class="form-check-label" for="radio_client_firma">
+                    Firma
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="radio_tip_client" id="radio_client_persoana" value="client_persoana" data-toggle="collapse" data-target="#collapse_client_persoana" aria-expanded="true" aria-controls="collapse_client_persoana">
+                <label class="form-check-label" for="radio_client_persoana">
+                    Persoana Fizica
+                </label>
+            </div>
         </div>
         <br>
-        <div class="collapse" id="collapse_client">
+
+        <!-- Date despre client, daca acesta este persoana juridica/firma -->
+        <div class="collapse" id="collapse_client_firma">
             <div class="row">
                 <div class="form-group col-sm-2">
-                    <label for="input_denumire_client">Denumire firma</label>
-                    <input type="text" class="form-control" id="input_denumire_client" name="input_denumire_client">
+                    <label for="input_denumire_client_firma">Denumire firma</label>
+                    <input type="text" class="form-control" id="input_denumire_client_firma" name="input_denumire_client_firma">
                 </div>
                 <div class="form-group col-sm-2">
-                    <label for="input_cui_client">CUI</label>
-                    <input type="text" class="form-control" id="input_cui_client" name="input_cui_client">
+                    <label for="input_cui_client_firma">CUI</label>
+                    <input type="text" class="form-control" id="input_cui_client_firma" name="input_cui_client_firma">
                 </div>
                 <div class="form-group col-sm-2">
-                    <label for="input_reg_com_client">Reg. Com.</label>
-                    <input type="text" class="form-control" id="input_reg_com_client" name="input_reg_com_client">
+                    <label for="input_reg_com_client_firma">Reg. Com.</label>
+                    <input type="text" class="form-control" id="input_reg_com_client_firma" name="input_reg_com_client_firma">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-sm-2">
-                    <label for="input_tara_client">Tara</label>
-                    <input type="text" class="form-control" id="input_tara_client" name="input_tara_client" value="Romania">
+                    <label for="input_tara_client_firma">Tara</label>
+                    <input type="text" class="form-control" id="input_tara_client_firma" name="input_tara_client_firma" value="Romania">
                 </div>
                 <div class="form-group col-sm-2">
-                    <label for="input_judet_client">Judet</label>
-                    <input type="text" class="form-control" id="input_judet_client" name="input_judet_client">
+                    <label for="input_judet_client_firma">Judet</label>
+                    <input type="text" class="form-control" id="input_judet_client_firma" name="input_judet_client_firma">
                 </div>
                 <div class="form-group col-sm-2">
-                    <label for="input_localitate_client">Localitate</label>
-                    <input type="text" class="form-control" id="input_localitate_client" name="input_localitate_client">
+                    <label for="input_localitate_client_firma">Localitate</label>
+                    <input type="text" class="form-control" id="input_localitate_client_firma" name="input_localitate_client_firma">
                 </div>
                 <div class="form-group col-sm-4">
-                    <label for="input_adresa_client">Adresa</label>
-                    <input type="text" class="form-control" id="input_adresa_client" name="input_adresa_client">
+                    <label for="input_adresa_client_firma">Adresa</label>
+                    <input type="text" class="form-control" id="input_adresa_client_firma" name="input_adresa_client_firma">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-sm-3">
-                    <label for="input_cont_banc_client">Cont Bancar</label>
-                    <input type="text" class="form-control" id="input_cont_banc_client" name="input_cont_banc_client">
+                    <label for="input_cont_banc_client_firma">Cont Bancar</label>
+                    <input type="text" class="form-control" id="input_cont_banc_client_firma" name="input_cont_banc_client_firma">
                 </div>
                 <div class="form-group col-sm-2">
-                    <label for="input_banca_client">Banca</label>
-                    <input type="text" class="form-control" id="input_banca_client" name="input_banca_client">
+                    <label for="input_banca_client_firma">Banca</label>
+                    <input type="text" class="form-control" id="input_banca_client_firma" name="input_banca_client_firma">
                 </div>
                 <div class="form-group col-sm-2">
-                    <label for="input_capital_social_client">Capital Social (RON)</label>
-                    <input type="number" class="form-control" id="input_capital_social_client" name="input_capital_social_client">
+                    <label for="input_capital_social_client_firma">Capital Social (RON)</label>
+                    <input type="number" class="form-control" id="input_capital_social_client_firma" name="input_capital_social_client_firma">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-sm-2">
-                    <label for="input_telefon_client">Telefon</label>
-                    <input type="tel" class="form-control" id="input_telefon_client" name="input_telefon_client">
+                    <label for="input_telefon_client_firma">Telefon</label>
+                    <input type="tel" class="form-control" id="input_telefon_client_firma" name="input_telefon_client_firma">
                 </div>
                 <div class="form-group col-sm-3">
-                    <label for="input_email_client">Email</label>
-                    <input type="email" class="form-control" id="input_email_client" name="input_email_client">
+                    <label for="input_email_client_firma">Email</label>
+                    <input type="email" class="form-control" id="input_email_client_firma" name="input_email_client_firma">
                 </div>
             </div>
         </div>
+
+        <!-- Date despre client daca acesta este persoana fizica -->
+        <div class="collapse" id="collapse_client_persoana">
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label for="input_nume_client_persoana">Nume si Prenume</label>
+                    <input type="text" class="form-control" id="input_nume_client_persoana" name="input_nume_client_persoana">
+                </div>
+                <div class="form-group col-sm-2">
+                    <label for="input_cnp_client_persoana">CNP</label>
+                    <input type="text" class="form-control" id="input_cnp_client_persoana" name="input_cnp_client_persoana">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label for="input_tara_client_persoana">Tara</label>
+                    <input type="text" class="form-control" id="input_tara_client_persoana" name="input_tara_client_persoana" value="Romania">
+                </div>
+                <div class="form-group col-sm-2">
+                    <label for="input_judet_client_persoana">Judet</label>
+                    <input type="text" class="form-control" id="input_judet_client_persoana" name="input_judet_client_persoana">
+                </div>
+                <div class="form-group col-sm-2">
+                    <label for="input_localitate_client_persoana">Localitate</label>
+                    <input type="text" class="form-control" id="input_localitate_client_persoana" name="input_localitate_client_persoana">
+                </div>
+                <div class="form-group col-sm-4">
+                    <label for="input_adresa_client_persoana">Adresa</label>
+                    <input type="text" class="form-control" id="input_adresa_client_persoana" name="input_adresa_client_persoana">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-sm-2">
+                    <label for="input_telefon_client_persoana">Telefon</label>
+                    <input type="tel" class="form-control" id="input_telefon_client_persoana" name="input_telefon_client_persoana">
+                </div>
+                <div class="form-group col-sm-3">
+                    <label for="input_email_client_persoana">Email</label>
+                    <input type="email" class="form-control" id="input_email_client_persoana" name="input_email_client_persoana">
+                </div>
+            </div>
+        </div>
+
         <br>
 
         <h5>Detalii Produse</h5>
@@ -321,22 +373,36 @@ function inserare_furnizor() //inseram datele furnizorului intr-un obiect
     return $furnizor;
 }
 
-function inserare_client() //inseram datele clientului intr-un obiect
+function inserare_client_firma() //inseram datele clientului intr-un obiect
 {
-    $client = new Firma;
-    $client->denumire = $_POST['input_denumire_client'];
-    $client->cui = $_POST['input_cui_client'];
-    $client->reg_com = $_POST['input_reg_com_client'];
-    $client->tara = $_POST['input_tara_client'];
-    $client->judet = $_POST['input_judet_client'];
-    $client->localitate = $_POST['input_localitate_client'];
-    $client->adresa = $_POST['input_adresa_client'];
-    $client->cont_bancar = $_POST['input_cont_banc_client'];
-    $client->banca = $_POST['input_banca_client'];
-    $client->capital_social = $_POST['input_capital_social_client'];
-    $client->telefon = $_POST['input_telefon_client'];
-    $client->email = $_POST['input_email_client'];
-    return $client;
+    $client_firma = new Firma;
+    $client_firma->denumire = $_POST['input_denumire_client_firma'];
+    $client_firma->cui = $_POST['input_cui_client_firma'];
+    $client_firma->reg_com = $_POST['input_reg_com_client_firma'];
+    $client_firma->tara = $_POST['input_tara_client_firma'];
+    $client_firma->judet = $_POST['input_judet_client_firma'];
+    $client_firma->localitate = $_POST['input_localitate_client_firma'];
+    $client_firma->adresa = $_POST['input_adresa_client_firma'];
+    $client_firma->cont_bancar = $_POST['input_cont_banc_client_firma'];
+    $client_firma->banca = $_POST['input_banca_client_firma'];
+    $client_firma->capital_social = $_POST['input_capital_social_client_firma'];
+    $client_firma->telefon = $_POST['input_telefon_client_firma'];
+    $client_firma->email = $_POST['input_email_client_firma'];
+    return $client_firma;
+}
+
+function inserare_client_persoana() //inseram datele clientului intr-un obiect
+{
+    $client_persoana = new PersoanaFizica;
+    $client_persoana->nume = $_POST['input_nume_client_persoana'];
+    $client_persoana->cnp = $_POST['input_cnp_client_persoana'];
+    $client_persoana->tara = $_POST['input_tara_client_persoana'];
+    $client_persoana->judet = $_POST['input_judet_client_persoana'];
+    $client_persoana->localitate = $_POST['input_localitate_client_persoana'];
+    $client_persoana->adresa = $_POST['input_adresa_client_persoana'];
+    $client_persoana->telefon = $_POST['input_telefon_client_persoana'];
+    $client_persoana->email = $_POST['input_email_client_persoana'];
+    return $client_persoana;
 }
 
 function inserare_produse($linii) //inseram datele produselor intr-un array de obiecte
@@ -398,7 +464,8 @@ function inserare_factura()
     return $factura;
 }
 
-function inserare_in_db(Firma $client, Firma $furnizor, array $produse, Factura $factura)
+//functia de inserare a datelor facturii daca clientul este persoana juridica
+function inserare_in_db_firma(Firma $client, Firma $furnizor, array $produse, Factura $factura)
 {
     //date de conectare la baza de date 
     $servername = "remotemysql.com";
@@ -420,8 +487,87 @@ VALUES ('$furnizor->denumire', '$furnizor->cui', '$furnizor->reg_com', '$furnizo
             echo "Error: " . $sql_furnizor . "<br>" . $conn->error;
         }
 
+
         $sql_client = "INSERT INTO client (denumire, cui, reg_com, tara, judet, localitate, adresa, cont_bancar, banca, capital_social, telefon, email)
 VALUES ('$client->denumire', '$client->cui', '$client->reg_com', '$client->tara', '$client->judet', '$client->localitate', '$client->adresa', '$client->cont_bancar', '$client->banca', $client->capital_social, $client->telefon, '$client->email')";
+
+        if ($conn->query($sql_client) === FALSE) {
+            echo "Error: " . $sql_client . "<br>" . $conn->error;
+        }
+
+        $nr_produse = 0;
+        foreach ($produse as $produs) {
+            $sql_produs = "INSERT INTO produs (descriere, unitate_masura, cantitate, pret_unit, valoare, cota_tva, valoare_tva)
+VALUES ('$produs->descriere','$produs->unitate_masura', $produs->cantitate, $produs->pret_unitar, $produs->valoare, $produs->cota_tva, $produs->valoare_tva)";
+
+            if ($conn->query($sql_produs) === FALSE) {
+                echo "Error: " . $sql_produs . "<br>" . $conn->error;
+            }
+            $nr_produse++;
+        }
+
+        $date_furnizor = $conn->query("SELECT id from furnizor ORDER BY id DESC LIMIT 1");
+        $row_f = $date_furnizor->fetch_assoc();
+        $id_furnizor = $row_f["id"];
+        $date_client = $conn->query("SELECT id from client ORDER BY id DESC LIMIT 1");
+        $row_c = $date_client->fetch_assoc();
+        $id_client = $row_c["id"];
+        echo $id_furnizor;
+
+
+        $sql_factura = "INSERT INTO factura (id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, subtotal_valoare, subtotal_tva, total)
+VALUES ($id_furnizor, $id_client,'$factura->tip_factura','$factura->serie', $factura->numar, '$factura->data', '$factura->scadenta', $factura->valoare, $factura->valoare_tva, $factura->total)";
+
+        if ($conn->query($sql_factura) === FALSE) {
+            echo "Error: " . $sql_factura . "<br>" . $conn->error;
+        }
+
+        $date_factura = $conn->query("SELECT id from factura ORDER BY id DESC LIMIT 1");
+        $row_fac = $date_factura->fetch_assoc();
+        $id_factura = $row_fac["id"];
+
+        $sql_toate_produsele = "SELECT id FROM produs ORDER BY id DESC LIMIT $nr_produse";
+        $query = mysqli_query($conn, $sql_toate_produsele);
+        if ($query) {
+            while ($row = mysqli_fetch_assoc($query)) {
+                $id_produs_db = $row['id'];
+                $sql_factura_produs = "INSERT INTO factura_produs (id_factura, id_produs)
+                VALUES ($id_factura, $id_produs_db)";
+                if ($conn->query($sql_factura_produs) === FALSE) {
+                    echo "Error: " . $sql_factura_produs . "<br>" . $conn->error;
+                }
+            }
+        }
+    }
+    $conn->close();
+}
+
+//functia de inserare a datelor facturii daca clientul este persoana fizica
+function inserare_in_db_persoana(PersoanaFizica $client, Firma $furnizor, array $produse, Factura $factura)
+{
+    //date de conectare la baza de date 
+    $servername = "remotemysql.com";
+    $username = "ALMtbDx7gH";
+    $password = "WCvE5R5BGN";
+    $dbname = "ALMtbDx7gH";
+    // Create connection
+    $conn = new mysqli($servername, $username, $password, $dbname);
+    // Check connection
+
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } else {
+        $sql_furnizor = "INSERT INTO furnizor (denumire, cui, reg_com, tara, judet, localitate, adresa, cont_bancar, banca, capital_social, telefon, email)
+VALUES ('$furnizor->denumire', '$furnizor->cui', '$furnizor->reg_com', '$furnizor->tara', '$furnizor->judet', '$furnizor->localitate', '$furnizor->adresa', '$furnizor->cont_bancar', '$furnizor->banca', $furnizor->capital_social, $furnizor->telefon, '$furnizor->email')";
+
+        if ($conn->query($sql_furnizor) === FALSE) {
+            echo "Error: " . $sql_furnizor . "<br>" . $conn->error;
+        }
+
+
+        $sql_client = "INSERT INTO client (denumire, cui, reg_com, tara, judet, localitate, adresa, cont_bancar, banca, capital_social, telefon, email)
+VALUES ('$client->nume', '$client->cnp', NULL, '$client->tara', '$client->judet', '$client->localitate', '$client->adresa', NULL, NULL, NULL, $client->telefon, '$client->email')";
 
         if ($conn->query($sql_client) === FALSE) {
             echo "Error: " . $sql_client . "<br>" . $conn->error;
@@ -506,19 +652,41 @@ if (isset($_POST['generare_factura'])) {
             echo '<script>alert("Nu ati completat toate datele furnizorului!");</script>';
             die();
         } else {
-            $client = inserare_client();
-            if (empty($client->denumire) || empty($client->cui) || empty($client->reg_com) || empty($client->tara) || empty($client->judet) || empty($client->localitate) || empty($client->adresa) || empty($client->cont_bancar) || empty($client->banca) || empty($client->capital_social) || empty($client->telefon) || empty($client->email)) {
-                echo '<script>alert("Nu ati completat toate datele clientului!");</script>';
-                die();
-            } else {
-                $produse = inserare_produse(nr_linii());
-                if (produse_complete($produse)) {
-                    inserare_in_db($client, $furnizor, $produse, $factura);
-                    echo '<script>alert("Factura generata cu succes!");</script>';
-                } else {
-                    echo '<script>alert("Nu ati completat toate datele produselor!");</script>';
+            if ($_POST['radio_tip_client'] == "client_firma") {
+                $client_firma = inserare_client_firma();
+                if (empty($client_firma->denumire) || empty($client_firma->cui) || empty($client_firma->reg_com) || empty($client_firma->tara) || empty($client_firma->judet) || empty($client_firma->localitate) || empty($client_firma->adresa) || empty($client_firma->cont_bancar) || empty($client_firma->banca) || empty($client_firma->capital_social) || empty($client_firma->telefon) || empty($client_firma->email)) {
+                    echo '<script>alert("Nu ati completat toate datele clientului!");</script>';
                     die();
+                } else {
+                    $produse = inserare_produse(nr_linii());
+                    if (produse_complete($produse)) {
+                        inserare_in_db_firma($client_firma, $furnizor, $produse, $factura);
+                        echo '<script>alert("Factura generata cu succes!");</script>';
+                    } else {
+                        echo '<script>alert("Nu ati completat toate datele produselor!");</script>';
+                        die();
+                    }
                 }
+            }
+            if ($_POST['radio_tip_client'] == "client_persoana") {
+                $client_persoana = inserare_client_persoana();
+                if (empty($client_persoana->nume) || empty($client_persoana->cnp) || empty($client_persoana->tara) || empty($client_persoana->judet) || empty($client_persoana->localitate) || empty($client_persoana->adresa)  || empty($client_persoana->telefon) || empty($client_persoana->email)) {
+                    echo '<script>alert("Nu ati completat toate datele clientului!");</script>';
+                    die();
+                } else {
+                    $produse = inserare_produse(nr_linii());
+                    if (produse_complete($produse)) {
+                        inserare_in_db_persoana($client_persoana, $furnizor, $produse, $factura);
+                        echo '<script>alert("Factura generata cu succes!");</script>';
+                    } else {
+                        echo '<script>alert("Nu ati completat toate datele produselor!");</script>';
+                        die();
+                    }
+                }
+            }
+            if ($_POST['radio_tip_factura'] == "") {
+                echo '<script>alert("Nu ati ales tipul de client!");</script>';
+                die();
             }
         }
     }
@@ -565,13 +733,33 @@ if (isset($_POST['generare_factura'])) {
             calculeaza_tva(linii);
         });
 
+        $('#radio_client_firma').click(function() {
+            if ($('#radio_client_persoana').attr('aria-expanded') == "true") {
+                $('#radio_client_persoana').addClass("collapsed");
+                $('#radio_client_persoana').attr({
+                    "aria-expanded": "false"
+                });
+                $('#collapse_client_persoana').removeClass("show");
+            }
+        });
+
+        $('#radio_client_persoana').click(function() {
+            if ($('#radio_client_firma').attr('aria-expanded') == "true") {
+                $('#radio_client_firma').addClass("collapsed");
+                $('#radio_client_firma').attr({
+                    "aria-expanded": "false"
+                });
+                $('#collapse_client_firma').removeClass("show");
+            }
+        });
+
     })
 
     //functia care calculeaza valoarea produselor pe fiecare linie fara tva --- numar de produse * pret pe bucata
     function calculeaza_valoare(id) {
         var pret_unitar = document.getElementById("pret_unit_" + id).value;
         var cantitate = document.getElementById("cantitate_" + id).value;
-        document.getElementById("valoare_" + id).value = pret_unitar * cantitate;
+        document.getElementById("valoare_" + id).value = (pret_unitar * cantitate).toFixed(2);
         calc_subtotal_valoare(id);
     }
 
@@ -579,7 +767,7 @@ if (isset($_POST['generare_factura'])) {
     function calculeaza_tva(id) {
         var valoare = document.getElementById("valoare_" + id).value;
         var cota_tva = document.getElementById("cota_tva_" + id).value;
-        document.getElementById("valoare_tva_" + id).value = valoare * cota_tva / 100;
+        document.getElementById("valoare_tva_" + id).value = (valoare * cota_tva / 100).toFixed(2);
         calc_subtotal_tva(id);
     }
 
@@ -590,7 +778,7 @@ if (isset($_POST['generare_factura'])) {
             var valoare = Number(document.getElementById("valoare_" + i).value);
             subtotal = Number(subtotal) + Number(valoare);
         }
-        document.getElementById("subtotal_valoare").value = Number(subtotal);
+        document.getElementById("subtotal_valoare").value = (Number(subtotal)).toFixed(2);
         calc_total();
     }
 
@@ -601,7 +789,7 @@ if (isset($_POST['generare_factura'])) {
             var valoare = Number(document.getElementById("valoare_tva_" + i).value);
             subtotal = Number(subtotal) + Number(valoare);
         }
-        document.getElementById("subtotal_tva").value = Number(subtotal);
+        document.getElementById("subtotal_tva").value = (Number(subtotal)).toFixed(2);
         calc_total();
     }
 
@@ -609,7 +797,7 @@ if (isset($_POST['generare_factura'])) {
     function calc_total() {
         var subtotal_valoare = Number(document.getElementById("subtotal_valoare").value);
         var subtotal_tva = Number(document.getElementById("subtotal_tva").value);
-        document.getElementById("total").value = subtotal_valoare + subtotal_tva;
+        document.getElementById("total").value = (subtotal_valoare + subtotal_tva).toFixed(2);
     }
 </script>
 

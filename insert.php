@@ -15,6 +15,18 @@ class Firma
     public $email;
 }
 
+class PersoanaFizica
+{
+    public $nume;
+    public $cnp;
+    public $tara;
+    public $judet;
+    public $localitate;
+    public $adresa;
+    public $telefon;
+    public $email;
+}
+
 class Produs
 {
     public $descriere;
