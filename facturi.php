@@ -40,6 +40,7 @@
 
 </html>
 <?php
+error_reporting(0);
 
 if (isset($_POST['afisare_facturi'])) {
     afiseaza_facturi("toate", "toate");
@@ -86,6 +87,7 @@ function seteaza_sf_tabel()
 
 function afiseaza_facturi($optiune_cautare, $input_cautare)
 {
+    
     echo seteaza_inceput_tabel();
     //date de conectare la baza de date 
     $servername = "remotemysql.com";

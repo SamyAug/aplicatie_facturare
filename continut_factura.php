@@ -124,6 +124,8 @@
 </html>
 
 <?php
+error_reporting(0);
+
 if (isset($_POST['afisare_factura'])) {
     $id = $_POST['factura_id'];
     $servername = "remotemysql.com";

@@ -353,7 +353,7 @@
 //includem fisierul cu clasele
 include 'insert.php';
 
-//error_reporting(0);
+error_reporting(0);
 
 function inserare_furnizor() //inseram datele furnizorului intr-un obiect
 {
@@ -512,7 +512,6 @@ VALUES ('$produs->descriere','$produs->unitate_masura', $produs->cantitate, $pro
         $date_client = $conn->query("SELECT id from client ORDER BY id DESC LIMIT 1");
         $row_c = $date_client->fetch_assoc();
         $id_client = $row_c["id"];
-        echo $id_furnizor;
 
 
         $sql_factura = "INSERT INTO factura (id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, subtotal_valoare, subtotal_tva, total)
@@ -590,7 +589,6 @@ VALUES ('$produs->descriere','$produs->unitate_masura', $produs->cantitate, $pro
         $date_client = $conn->query("SELECT id from client ORDER BY id DESC LIMIT 1");
         $row_c = $date_client->fetch_assoc();
         $id_client = $row_c["id"];
-        echo $id_furnizor;
 
 
         $sql_factura = "INSERT INTO factura (id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, subtotal_valoare, subtotal_tva, total)
