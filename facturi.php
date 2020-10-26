@@ -70,6 +70,7 @@ function seteaza_inceput_tabel()
             <th scope=\"col\">Furnizor</th>
             <th scope=\"col\">Client</th>
             <th scope=\"col\">Total</th>
+            <th scope=\"col\"></th>
         </tr>
     </thead>
     <tbody id=\"table_body\">";
@@ -101,14 +102,14 @@ function afiseaza_facturi($optiune_cautare, $input_cautare)
     } else {
         $nr_linii = 0;
         if ($optiune_cautare == "toate" && $input_cautare == "toate") {
-            $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura ORDER BY id DESC";
+            $sql_toate_facturile = "SELECT id, id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura ORDER BY id DESC";
         } else {
             if ($optiune_cautare == "denumire_furnizor") {
                 $date_furnizor = $conn->query("SELECT id from furnizor where denumire LIKE '%$input_cautare%'");
                 $row_furnizor = $date_furnizor->fetch_assoc();
                 if ($row_furnizor != NULL) {
                     $id_furnizor = $row_furnizor["id"];
-                    $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_furnizor = '$id_furnizor' ORDER BY id DESC";
+                    $sql_toate_facturile = "SELECT id, id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_furnizor = '$id_furnizor' ORDER BY id DESC";
                 } else {
                     echo "<script>alert(\"Furnizorul nu s-a gasit\"); </script>";
                 }
@@ -118,12 +119,12 @@ function afiseaza_facturi($optiune_cautare, $input_cautare)
                     $row_client = $date_client->fetch_assoc();
                     if ($row_client != NULL) {
                         $id_client = $row_client["id"];
-                        $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_client = '$id_client' ORDER BY id DESC";
+                        $sql_toate_facturile = "SELECT id, id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE id_client = '$id_client' ORDER BY id DESC";
                     } else {
                         echo "<script>alert(\"Clientul nu s-a gasit\"); </script>";
                     }
                 } else {
-                    $sql_toate_facturile = "SELECT id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE $optiune_cautare LIKE '%$input_cautare%' ORDER BY id DESC";
+                    $sql_toate_facturile = "SELECT id, id_furnizor, id_client, tip_factura, serie, numar, data_emiterii, scadenta, total FROM factura WHERE $optiune_cautare LIKE '%$input_cautare%' ORDER BY id DESC";
                 }
             }
         }
@@ -132,6 +133,7 @@ function afiseaza_facturi($optiune_cautare, $input_cautare)
             if ($query) {
                 while ($row = mysqli_fetch_assoc($query)) {
                     $nr_linii++;
+                    $id_factura = $row['id'];
                     $id_furnizor = $row['id_furnizor'];
                     $id_client = $row['id_client'];
                     $tip_factura = $row['tip_factura'];
@@ -153,15 +155,19 @@ function afiseaza_facturi($optiune_cautare, $input_cautare)
 
                     echo "
             <tr>
-                <th>$nr_linii</th>
-                <td>$tip_factura</td>
-                <td>$serie</td>
-                <td>$numar</td>
-                <td>$data_emiterii</td>
-                <td>$scadenta</td>
-                <td>$nume_furnizor</td>
-                <td>$nume_client</td>
-                <td>$total</td>
+                <form action=\"continut_factura.php\" method=\"POST\">
+                    <th>$nr_linii</th>
+                    <td>$tip_factura</td>
+                    <td>$serie</td>
+                    <td>$numar</td>
+                    <td>$data_emiterii</td>
+                    <td>$scadenta</td>
+                    <td>$nume_furnizor</td>
+                    <td>$nume_client</td>
+                    <td>$total</td>
+                    <input type=\"hidden\" id=\"factura_id\" name=\"factura_id\" value=\"$id_factura\">
+                    <td><input type=\"submit\" class=\"btn btn-dark\" name=\"afisare_factura\" value=\"Afiseaza\"></td>
+                </form>
             </tr>
             ";
                 }
